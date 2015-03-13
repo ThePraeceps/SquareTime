@@ -23,8 +23,7 @@ RESOURCE_ID_NUM_3, RESOURCE_ID_NUM_4, RESOURCE_ID_NUM_5,
 RESOURCE_ID_NUM_6, RESOURCE_ID_NUM_7, RESOURCE_ID_NUM_8,
 RESOURCE_ID_NUM_9
 };
-static InverterLayer *bottom_inv_layer;
-
+static InverterLayer *s1_bar, *s2_bar, *s3_bar, *s4_bar, *s5_bar;
 static GBitmap *s_images[TOTAL_IMAGE_SLOTS];
 static BitmapLayer *s_image_layers[TOTAL_IMAGE_SLOTS];
 #define EMPTY_SLOT -1
@@ -56,33 +55,15 @@ GRect bounds = gbitmap_get_bounds(s_images[slot_number]);
 #else
 GRect bounds = s_images[slot_number]->bounds;
 #endif
-BitmapLayer *bitmap_layer = bitmap_layer_create(GRect((((slot_number % 2) * 62)+12), (slot_number / 2) * 62, bounds.size.w, bounds.size.h));
+BitmapLayer *bitmap_layer = bitmap_layer_create(GRect((((slot_number % 2) * 62)+12), ((slot_number / 2) * 62)+8, bounds.size.w, bounds.size.h));
 s_image_layers[slot_number] = bitmap_layer;
 bitmap_layer_set_bitmap(bitmap_layer, s_images[slot_number]);
 Layer *window_layer = window_get_root_layer(s_main_window);
 layer_add_child(window_layer, bitmap_layer_get_layer(bitmap_layer));
 }
+static void window_load(Window *window, struct tm *t) {
 
-static void window_load(Window *windowm, struct tm *t) {
-  bottom_inv_layer = inverter_layer_create(GRect(0, 0, 144, 0));
-   //Init seconds bar
-int seconds = t->tm_sec;
-if(seconds >= 15 && seconds < 30)
-{
-cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 135, 0, 5), GRect(0, 135, 36, 5), 500, 0);
-}
-else if(seconds >= 30 && seconds < 45)
-{
-cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 135, 0, 5), GRect(0, 135, 72, 5), 500, 0);
-}
-else if(seconds >= 45 && seconds < 58)
-{
-cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 135, 0, 5), GRect(0, 135, 108, 5), 500, 0);
-}
-else if(seconds >= 58)
-{
-cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 135, 0, 5), GRect(0, 135, 144, 5), 500, 1000);
-}
+
 }
 static void unload_digit_image_from_slot(int slot_number) {
 if (s_image_slot_state[slot_number] != EMPTY_SLOT) {
@@ -100,9 +81,8 @@ value = value % 100; // Maximum of two digits per row.
 for (int column_number = 1; column_number >= 0; column_number--) {
 int slot_number = (row_number * 2) + column_number;
 unload_digit_image_from_slot(slot_number);
-if (!((value == 0) && (column_number == 0) && !show_first_leading_zero)) {
 load_digit_image_into_slot(slot_number, value % 10);
-}
+
 value = value / 10;
 }
 }
@@ -118,7 +98,6 @@ static void display_time(struct tm *tick_time) {
 display_value(get_display_hour(tick_time->tm_hour), 0, false);
 display_value(tick_time->tm_min, 1, true);
 }
-
 static void handle_tick(struct tm *t, TimeUnits units_changed)
 {
 //Get the time
@@ -126,26 +105,43 @@ int seconds = t->tm_sec;
 //Bottom suface
 switch(seconds)
 {
-case 15:
-cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 135, 0, 5), GRect(0, 135, 36, 5), 500, 0);
+case 0:
+  display_time(t);
+  break;
+case 10:
+cl_animate_layer(inverter_layer_get_layer(s1_bar), GRect(0, 8, 6, 0), GRect(0, 8, 6, 20), 500, 0);
+break;
+case 20:
+cl_animate_layer(inverter_layer_get_layer(s2_bar), GRect(0, 30, 6, 0), GRect(0, 30, 6, 20), 500, 0);
 break;
 case 30:
-cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 135, 36, 5), GRect(0, 135, 72, 5), 500, 0);
+cl_animate_layer(inverter_layer_get_layer(s3_bar), GRect(0, 52, 6, 0), GRect(0, 52, 6, 20), 500, 0);
 break;
-case 45:
-cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 135, 72, 5), GRect(0, 135, 108, 5), 500, 0);
+case 40:
+cl_animate_layer(inverter_layer_get_layer(s4_bar), GRect(0,74, 6, 0), GRect(0, 74, 6, 20), 500, 0);
+break;
+case 50:
+cl_animate_layer(inverter_layer_get_layer(s5_bar), GRect(0, 96, 6, 0), GRect(0, 96, 6, 20), 500, 0);
 break;
 }
-}
-  
-static void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
-display_time(tick_time);
 }
 static void main_window_load(Window *window) {
 time_t now = time(NULL);
-struct tm *tick_time = localtime(&now);
-display_time(tick_time);
-tick_timer_service_subscribe(MINUTE_UNIT, handle_minute_tick);
+struct tm *t = localtime(&now);
+display_time(t);
+tick_timer_service_subscribe(SECOND_UNIT, handle_tick);
+    s1_bar = inverter_layer_create(GRect(0, 8, 6, 0));
+layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s1_bar));
+  s2_bar = inverter_layer_create(GRect(0, 30, 6, 0));
+layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s2_bar));
+  s3_bar = inverter_layer_create(GRect(0, 52, 6, 0));
+layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s3_bar));
+  s4_bar = inverter_layer_create(GRect(0, 74, 6, 0));
+layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s4_bar));
+  s5_bar = inverter_layer_create(GRect(0, 96, 6, 0));
+layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s5_bar));
+//Init seconds bar
+int seconds = t->tm_sec;
 }
 static void main_window_unload(Window *window) {
 for (int i = 0; i < TOTAL_IMAGE_SLOTS; i++) {
