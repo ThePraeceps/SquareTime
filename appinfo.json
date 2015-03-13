@@ -9,6 +9,56 @@
     "resources": {
         "media": [
             {
+                "file": "images/date_9.png",
+                "name": "DATE_9",
+                "type": "png"
+            },
+            {
+                "file": "images/date_8.png",
+                "name": "DATE_8",
+                "type": "png"
+            },
+            {
+                "file": "images/date_7.png",
+                "name": "DATE_7",
+                "type": "png"
+            },
+            {
+                "file": "images/date_6.png",
+                "name": "DATE_6",
+                "type": "png"
+            },
+            {
+                "file": "images/date_5.png",
+                "name": "DATE_5",
+                "type": "png"
+            },
+            {
+                "file": "images/date_4.png",
+                "name": "DATE_4",
+                "type": "png"
+            },
+            {
+                "file": "images/date_3.png",
+                "name": "DATE_3",
+                "type": "png"
+            },
+            {
+                "file": "images/date_2.png",
+                "name": "DATE_2",
+                "type": "png"
+            },
+            {
+                "file": "images/date_1.png",
+                "name": "DATE_1",
+                "type": "png"
+            },
+            {
+                "file": "images/date_0.png",
+                "name": "DATE_0",
+                "type": "png"
+            },
+            {
                 "file": "images/num_9.png",
                 "name": "NUM_9",
                 "type": "png"
