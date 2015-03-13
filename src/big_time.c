@@ -79,7 +79,7 @@ typedef struct Slot {
 
 
 // Footer
-static Layer *footer_layer;
+ static Layer *footer_layer;
 
 // Date
 #define NUMBER_OF_DATE_SLOTS 4
@@ -347,9 +347,9 @@ static void init() {
   // Footer
   int footer_height = SCREEN_HEIGHT - SCREEN_WIDTH + 28;
 
-  footer_layer = layer_create(GRect(0, SCREEN_WIDTH, SCREEN_WIDTH, footer_height));
-  layer_add_child(root_layer, footer_layer);
-  // Date
+   footer_layer = layer_create(GRect(0, SCREEN_WIDTH, SCREEN_WIDTH, footer_height));
+   layer_add_child(root_layer, footer_layer);
+   //Date
   for (int i = 0; i < NUMBER_OF_DATE_SLOTS; i++) {
     Slot *date_slot = &date_slots[i];
     date_slot->number = i;
@@ -357,7 +357,7 @@ static void init() {
   }
 
   GRect date_layer_frame = GRectZero;
-  date_layer_frame.size.w   = DATE_IMAGE_WIDTH + 2 + DATE_IMAGE_WIDTH + 4 + DATE_IMAGE_WIDTH + 2 + DATE_IMAGE_WIDTH;
+  date_layer_frame.size.w   = DATE_IMAGE_WIDTH + MARGIN + DATE_IMAGE_WIDTH + 4 + DATE_IMAGE_WIDTH + 2 + DATE_IMAGE_WIDTH;
   date_layer_frame.size.h   = DATE_IMAGE_HEIGHT;
   date_layer_frame.origin.x = 14;
   date_layer_frame.origin.y = 140;
@@ -381,7 +381,6 @@ static void deinit() {
   layer_destroy(date_layer);
 
   // Seconds
-
   layer_destroy(footer_layer);
 
   window_destroy(window);
