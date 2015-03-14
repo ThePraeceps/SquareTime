@@ -11,10 +11,7 @@ static Window *s_main_window;
 //
 // Slot on-screen layout:
 // 0 1
-// 2 
-
-// Original Code
-
+// 2 3
 #define TOTAL_IMAGE_SLOTS 4
 #define NUMBER_OF_IMAGES 10
 #define BARLENGTH 25
@@ -22,28 +19,6 @@ static Window *s_main_window;
 #define BARMARGIN 3
 #define MARGIN 14
 
-bool change_state = false;
-static InverterLayer *s1_bar, *s2_bar, *s3_bar, *s4_bar, *s5_bar;
-static GBitmap *s_images[TOTAL_IMAGE_SLOTS];
-static BitmapLayer *s_image_layers[TOTAL_IMAGE_SLOTS];
-#define EMPTY_SLOT -1
-  
-// Settings - New Code
-#define USE_AMERICAN_DATE_FORMAT      false
-
-// Magic numbers
-#define SCREEN_WIDTH        144
-#define SCREEN_HEIGHT       168
-
-
-#define DATE_IMAGE_WIDTH    28
-#define DATE_IMAGE_HEIGHT   28
-
-#define DAY_IMAGE_WIDTH     20
-#define DAY_IMAGE_HEIGHT    10
-
-#define TIME_SLOT_SPACE     2
-#define DATE_PART_SPACE     4
 
 // These images are 72 x 84 pixels (i.e. a quarter of the display),
 // black and white with the digit character centered in the image.
@@ -55,7 +30,6 @@ const int IMAGE_RESOURCE_IDS[NUMBER_OF_IMAGES] = {
     RESOURCE_ID_NUM_9
 };
 
-//Date Images
 #define NUMBER_OF_DATE_IMAGES 10
 const int DATE_IMAGE_RESOURCE_IDS[NUMBER_OF_DATE_IMAGES] = {
   RESOURCE_ID_DATE_0, 
@@ -64,43 +38,19 @@ const int DATE_IMAGE_RESOURCE_IDS[NUMBER_OF_DATE_IMAGES] = {
   RESOURCE_ID_DATE_7, RESOURCE_ID_DATE_8, RESOURCE_ID_DATE_9
 };
 
-
-// General
-static Window *window;
-
-
+bool change_state = false;
+static InverterLayer *s1_bar, *s2_bar, *s3_bar, *s4_bar, *s5_bar;
+static GBitmap *s_images[TOTAL_IMAGE_SLOTS];
+static BitmapLayer *s_image_layers[TOTAL_IMAGE_SLOTS];
+static GBitmap *d_images[4];
+static BitmapLayer *d_image_layers[4];
 #define EMPTY_SLOT -1
-typedef struct Slot {
-  int         number;
-  GBitmap     *image;
-  BitmapLayer *image_layer;
-  int         state;
-} Slot;
-
-
-// Footer
- static Layer *footer_layer;
-
-// Date
-#define NUMBER_OF_DATE_SLOTS 4
-static Layer *date_layer;
-static Slot date_slots[NUMBER_OF_DATE_SLOTS];
-
-// General
-BitmapLayer *load_date_image_into_slot(Slot *slot, int digit_value, Layer *parent_layer, GRect frame, const int *digit_resource_ids);
-void unload_date_image_from_slot(Slot *slot);
-
-// Date
-void display_date(struct tm *tick_time);
-void display_date_value(int value, int part_number);
-void update_date_slot(Slot *date_slot, int digit_value);
-
-
 // The state is either "empty" or the digit of the image currently in
 // the slot--which was going to be used to assist with de-duplication
 // but we're not doing that due to the one parent-per-layer
 // restriction mentioned above.
 static int s_image_slot_state[TOTAL_IMAGE_SLOTS] = {EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT};
+static int d_image_slot_state[4] = {EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT};
 static void load_digit_image_into_slot(int slot_number, int digit_value) {
     /*
     * Loads the digit image from the application's resources and
@@ -139,41 +89,6 @@ static void unload_digit_image_from_slot(int slot_number) {
         s_image_slot_state[slot_number] = EMPTY_SLOT;
     }
 }
-
-
-// General
-
-BitmapLayer *load_date_image_into_slot(Slot *slot, int digit_value, Layer *parent_layer, GRect frame, const int *digit_resource_ids) {
-  if (digit_value < 0 || digit_value > 9)
-    return NULL;
-
-  if (slot->state != EMPTY_SLOT)
-    return NULL;
-
-  slot->state = digit_value;
-
-  slot->image = gbitmap_create_with_resource(digit_resource_ids[digit_value]);
-
-  slot->image_layer = bitmap_layer_create(frame);
-  bitmap_layer_set_bitmap(slot->image_layer, slot->image);
-  layer_add_child(parent_layer, bitmap_layer_get_layer(slot->image_layer));
-
-  return slot->image_layer;
-}
-
-//General Date
-
-void unload_date_image_from_slot(Slot *slot) {
-  if (slot->state == EMPTY_SLOT)
-    return;
-
-  layer_remove_from_parent(bitmap_layer_get_layer(slot->image_layer));
-  bitmap_layer_destroy(slot->image_layer);
-
-  gbitmap_destroy(slot->image);
-
-  slot->state = EMPTY_SLOT;
-}
 static void display_value(unsigned short value, unsigned short row_number, bool show_first_leading_zero) {
     value = value % 100; // Maximum of two digits per row.
     // Column order is: | Column 0 | Column 1 |
@@ -187,48 +102,62 @@ static void display_value(unsigned short value, unsigned short row_number, bool 
         value = value / 10;
     }
 }
-// Date
-void display_date(struct tm *tick_time) {
-  int day   = tick_time->tm_mday;
-  int month = tick_time->tm_mon + 1;
 
-#if USE_AMERICAN_DATE_FORMAT
-  display_date_value(month, 0);
-  display_date_value(day,   1);
-#else
-  display_date_value(day,   0);
-  display_date_value(month, 1);
-#endif
+static void load_date_image_into_slot(int slot_number, int digit_value) {
+
+    if ((slot_number < 0) || (slot_number >= TOTAL_IMAGE_SLOTS)) {
+       APP_LOG(APP_LOG_LEVEL_DEBUG, "Slot Number Fail");
+        return;
+     
+    }
+    if ((digit_value < 0) || (digit_value > 9)) {
+      APP_LOG(APP_LOG_LEVEL_DEBUG, "Digit Number Fail");
+        return;
+            
+    }
+    if (s_image_slot_state[slot_number] != EMPTY_SLOT) {
+       APP_LOG(APP_LOG_LEVEL_DEBUG, "Not Empty");
+        return;
+    }
+     APP_LOG(APP_LOG_LEVEL_DEBUG, "Digit value now %d",digit_value);
+    d_image_slot_state[slot_number] = digit_value;
+    d_images[slot_number] = gbitmap_create_with_resource(IMAGE_RESOURCE_IDS[digit_value]);
+    #ifdef PBL_PLATFORM_BASALT
+    GRect bounds = gbitmap_get_bounds(d_images[slot_number]);
+    #else
+    GRect bounds = d_images[slot_number]->bounds;
+    #endif
+    BitmapLayer *bitmap_layer = bitmap_layer_create(GRect((((slot_number) * 30)+14), 140, bounds.size.w, bounds.size.h));
+    d_image_layers[slot_number] = bitmap_layer;
+    bitmap_layer_set_bitmap(bitmap_layer, d_images[slot_number]);
+    Layer *window_layer = window_get_root_layer(s_main_window);
+    layer_add_child(window_layer, bitmap_layer_get_layer(bitmap_layer));
 }
 
-void update_date_slot(Slot *date_slot, int digit_value) {
-  if (date_slot->state == digit_value)
-    return;
-
-  int x = date_slot->number * (DATE_IMAGE_WIDTH + MARGIN);
-  if (date_slot->number >= 2) {
-    x += 3; // 3 extra pixels of space between the day and month
-  }
-  GRect frame =  GRect(x, 0, DATE_IMAGE_WIDTH, DATE_IMAGE_HEIGHT);
-
-  unload_date_image_from_slot(date_slot);
-  load_date_image_into_slot(date_slot, digit_value, date_layer, frame, DATE_IMAGE_RESOURCE_IDS);
+static void unload_date_image_from_slot(int slot_number) {
+    if (d_image_slot_state[slot_number] != EMPTY_SLOT) {
+        layer_remove_from_parent(bitmap_layer_get_layer(d_image_layers[slot_number]));
+        bitmap_layer_destroy(d_image_layers[slot_number]);
+        gbitmap_destroy(d_images[slot_number]);
+        d_image_slot_state[slot_number] = EMPTY_SLOT;
+       APP_LOG(APP_LOG_LEVEL_DEBUG, "Unloaded");
+    }
 }
-
-void display_date_value(int value, int part_number) {
-  value = value % 100; // Maximum of two digits per row.
-
-  for (int column_number = 1; column_number >= 0; column_number--) {
-    int date_slot_number = (part_number * 2) + column_number;
-
-    Slot *date_slot = &date_slots[date_slot_number];
-
-    update_date_slot(date_slot, value % 10);
-
-    value = value / 10;
-  }
+static void display_value_date(unsigned short value, unsigned short row_number, bool show_first_leading_zero) {
+    value = value % 100; // Maximum of two digits per row.
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Succesfully Display Value");
+    // Column order is: | Column 0 | Column 1 |
+    // (We process the columns in reverse order because that makes
+    // extracting the digits from the value easier.)
+    for (int column_number = 1; column_number >= 0; column_number--) {
+        int slot_number = (row_number * 2) + column_number;
+        unload_date_image_from_slot(slot_number);
+        load_date_image_into_slot(slot_number, value % 10);
+         APP_LOG(APP_LOG_LEVEL_DEBUG, "Looping Input");
+        value = value / 10;
+      
+    }
 }
-
 static unsigned short get_display_hour(unsigned short hour) {
     if (clock_is_24h_style()) {
         return hour;
@@ -241,6 +170,12 @@ static void display_time(struct tm *tick_time) {
     display_value(get_display_hour(tick_time->tm_hour), 0, false);
     display_value(tick_time->tm_min, 1, true);
 }
+
+static void display_month(struct tm *tick_time){
+  display_value_date(tick_time->tm_mday,0,true);
+  display_value_date(tick_time->tm_mon,1,true);
+}
+
 static void handle_tick(struct tm *t, TimeUnits units_changed)
 {  
     //Get the time
@@ -279,15 +214,13 @@ static void handle_tick(struct tm *t, TimeUnits units_changed)
       // 140 Pixels of line
         
     }
-    if ((units_changed & DAY_UNIT) == DAY_UNIT) {
-    display_date(t);
-  }
     
 }
 static void main_window_load(Window *window) {
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     display_time(t);
+    display_month(t);
     tick_timer_service_subscribe(SECOND_UNIT, handle_tick);
     s1_bar = inverter_layer_create(GRect(0, 8, 6, 0));
     layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s1_bar));
@@ -299,6 +232,7 @@ static void main_window_load(Window *window) {
     layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s4_bar));
     s5_bar = inverter_layer_create(GRect(0, 96, 6, 0));
     layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(s5_bar));
+  
     //Init seconds bar
     int seconds = t->tm_sec;
         if (seconds > 10){
@@ -317,7 +251,10 @@ static void main_window_load(Window *window) {
         if (seconds > 50){
          cl_animate_layer(inverter_layer_get_layer(s5_bar),  GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, BARWIDTH, BARLENGTH), 500, 400); 
         }
-                      
+        
+        
+
+        
   
 }
 static void main_window_unload(Window *window) {
@@ -338,52 +275,9 @@ static void init() {
         .unload = main_window_unload,
     });
     window_stack_push(s_main_window, true);
-    window = window_create();
-  window_stack_push(window, true /* Animated */);
-  window_set_background_color(window, GColorBlack);
-
-  Layer *root_layer = window_get_root_layer(window);
-
-  // Footer
-  int footer_height = SCREEN_HEIGHT - SCREEN_WIDTH + 28;
-
-   footer_layer = layer_create(GRect(0, SCREEN_WIDTH, SCREEN_WIDTH, footer_height));
-   layer_add_child(root_layer, footer_layer);
-   //Date
-  for (int i = 0; i < NUMBER_OF_DATE_SLOTS; i++) {
-    Slot *date_slot = &date_slots[i];
-    date_slot->number = i;
-    date_slot->state  = EMPTY_SLOT;
-  }
-
-  GRect date_layer_frame = GRectZero;
-  date_layer_frame.size.w   = DATE_IMAGE_WIDTH + MARGIN + DATE_IMAGE_WIDTH + 4 + DATE_IMAGE_WIDTH + 2 + DATE_IMAGE_WIDTH;
-  date_layer_frame.size.h   = DATE_IMAGE_HEIGHT;
-  date_layer_frame.origin.x = 14;
-  date_layer_frame.origin.y = 140;
-
-  date_layer = layer_create(date_layer_frame);
-  layer_add_child(footer_layer, date_layer);
-
-
-
-  // Display
-  time_t now = time(NULL);
-  struct tm *tick_time = localtime(&now);
-  display_date(tick_time);
 }
 static void deinit() {
     window_destroy(s_main_window);
-    // Date
-  for (int i = 0; i < NUMBER_OF_DATE_SLOTS; i++) {
-    unload_date_image_from_slot(&date_slots[i]);
-  }
-  layer_destroy(date_layer);
-
-  // Seconds
-  layer_destroy(footer_layer);
-
-  window_destroy(window);
 }
 int main(void) {
     init();
