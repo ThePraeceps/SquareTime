@@ -185,7 +185,7 @@
     "shortName": "Square Time",
     "uuid": "76719f97-45cb-4263-88ad-b373ef2a3a42",
     "versionCode": 1,
-    "versionLabel": "1.3",
+    "versionLabel": "1.45",
     "watchapp": {
         "watchface": true
     }

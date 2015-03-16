@@ -189,7 +189,7 @@ static void display_time(struct tm *tick_time) {
 
 static void display_month(struct tm *tick_time){
   display_value_date(tick_time->tm_mday,0,true);
-  display_value_date(tick_time->tm_mon,1,true);
+  display_value_date((tick_time->tm_mon)+1,1,true);
 }
 void unload_day_item() {
 
@@ -218,9 +218,7 @@ void bt_handler(bool connected) {
 APP_LOG(APP_LOG_LEVEL_DEBUG, "Bluetooth Handled");
             if (connected == true) {
                 vibes_double_pulse();
-                APP_LOG(APP_LOG_LEVEL_DEBUG, "Connected");
                 } else {
-                APP_LOG(APP_LOG_LEVEL_DEBUG, "Disconnected");
                 vibes_long_pulse();
             }
 } 
