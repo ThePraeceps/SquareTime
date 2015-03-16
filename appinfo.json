@@ -3,11 +3,52 @@
     "capabilities": [
         ""
     ],
-    "companyName": "sunrob946@gmail.com",
-    "longName": "Big Time Edit",
+    "companyName": "Praeceps Inc.",
+    "longName": "Square Time",
     "projectType": "native",
     "resources": {
         "media": [
+            {
+                "file": "images/logo.png",
+                "menuIcon": true,
+                "name": "logo",
+                "type": "png"
+            },
+            {
+                "file": "images/day_1.png",
+                "name": "DAY_1",
+                "type": "png"
+            },
+            {
+                "file": "images/day_7.png",
+                "name": "DAY_7",
+                "type": "png"
+            },
+            {
+                "file": "images/day_6.png",
+                "name": "DAY_6",
+                "type": "png"
+            },
+            {
+                "file": "images/day_5.png",
+                "name": "DAY_5",
+                "type": "png"
+            },
+            {
+                "file": "images/day_4.png",
+                "name": "DAY_4",
+                "type": "png"
+            },
+            {
+                "file": "images/day_3.png",
+                "name": "DAY_3",
+                "type": "png"
+            },
+            {
+                "file": "images/day_2.png",
+                "name": "DAY_2",
+                "type": "png"
+            },
             {
                 "file": "images/date_9.png",
                 "name": "DATE_9",
@@ -111,10 +152,10 @@
         ]
     },
     "sdkVersion": "2",
-    "shortName": "Big Time Edit",
+    "shortName": "Square Time",
     "uuid": "76719f97-45cb-4263-88ad-b373ef2a3a42",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.3",
     "watchapp": {
         "watchface": true
     }
