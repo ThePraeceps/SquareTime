@@ -9,6 +9,36 @@
     "resources": {
         "media": [
             {
+                "file": "images/date_K.png",
+                "name": "DATE_K",
+                "type": "png"
+            },
+            {
+                "file": "images/date_O.png",
+                "name": "DATE_O",
+                "type": "png"
+            },
+            {
+                "file": "images/date_D.png",
+                "name": "DATE_D",
+                "type": "png"
+            },
+            {
+                "file": "images/date_B.png",
+                "name": "DATE_B",
+                "type": "png"
+            },
+            {
+                "file": "images/date_T.png",
+                "name": "DATE_T",
+                "type": "png"
+            },
+            {
+                "file": "images/date_C.png",
+                "name": "DATE_C",
+                "type": "png"
+            },
+            {
                 "file": "images/logo.png",
                 "menuIcon": true,
                 "name": "logo",

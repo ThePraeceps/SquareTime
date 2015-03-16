@@ -45,6 +45,13 @@ const int DATE_IMAGE_RESOURCE_IDS[NUMBER_OF_DATE_IMAGES] = {
 };
 
 
+#define NUMBER_OF_BT_IMAGES 6
+  const int BT_IMAGE_RESOURCE_IDS[NUMBER_OF_BT_IMAGES] = {RESOURCE_ID_DATE_B,RESOURCE_ID_DATE_T,
+                                                          RESOURCE_ID_DATE_O,RESOURCE_ID_DATE_K,
+                                                          RESOURCE_ID_DATE_D,RESOURCE_ID_DATE_C
+};
+
+
 
 bool change_state = false;
 static InverterLayer *s1_bar, *s2_bar, *s3_bar, *s4_bar, *s5_bar;
