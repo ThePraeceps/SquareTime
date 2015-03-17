@@ -207,7 +207,7 @@ int WkDay = tick_time->tm_wday - 1;
     WkDay = 6;
   }
 #else
-  WkDay = tick_time->tm_wday;
+ int WkDay = tick_time->tm_wday;
 #endif
       
     wd_image = gbitmap_create_with_resource(DAY_IMAGE_RESOURCE_IDS[WkDay]);
