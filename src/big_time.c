@@ -19,6 +19,7 @@ static Window *s_main_window;
 #define BARMARGIN 3
 #define MARGIN 14
 #define NUMBER_OF_DAY_IMAGES 7
+#define MonStart  false
 const int DAY_IMAGE_RESOURCE_IDS[NUMBER_OF_DAY_IMAGES] = {
   RESOURCE_ID_DAY_1, RESOURCE_ID_DAY_2, 
   RESOURCE_ID_DAY_3, RESOURCE_ID_DAY_4, RESOURCE_ID_DAY_5, 
@@ -200,7 +201,16 @@ void unload_day_item() {
 
 void display_day(struct tm *tick_time) {
   unload_day_item();
-    wd_image = gbitmap_create_with_resource(DAY_IMAGE_RESOURCE_IDS[tick_time->tm_wday]);
+#if MonStart
+int WkDay = tick_time->tm_wday - 1;
+  if (WkDay < 0){
+    WkDay = 6;
+  }
+#else
+  WkDay = tick_time->tm_wday;
+#endif
+      
+    wd_image = gbitmap_create_with_resource(DAY_IMAGE_RESOURCE_IDS[WkDay]);
     #ifdef PBL_PLATFORM_BASALT
     GRect bounds = gbitmap_get_bounds(wd_image);
     #else
@@ -215,7 +225,6 @@ void display_day(struct tm *tick_time) {
 
  	
 void bt_handler(bool connected) {
-APP_LOG(APP_LOG_LEVEL_DEBUG, "Bluetooth Handled");
             if (connected == true) {
                 vibes_double_pulse();
                 } else {
