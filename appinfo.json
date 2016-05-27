@@ -4,188 +4,162 @@
         ""
     ],
     "companyName": "Praeceps Inc.",
+    "enableMultiJS": false,
     "longName": "Square Time",
     "projectType": "native",
     "resources": {
         "media": [
             {
-                "file": "images/date_K.png",
-                "name": "DATE_K",
-                "type": "png"
-            },
-            {
-                "file": "images/date_O.png",
-                "name": "DATE_O",
-                "type": "png"
-            },
-            {
-                "file": "images/date_D.png",
-                "name": "DATE_D",
-                "type": "png"
-            },
-            {
-                "file": "images/date_B.png",
-                "name": "DATE_B",
-                "type": "png"
-            },
-            {
-                "file": "images/date_T.png",
-                "name": "DATE_T",
-                "type": "png"
-            },
-            {
-                "file": "images/date_C.png",
-                "name": "DATE_C",
-                "type": "png"
-            },
-            {
                 "file": "images/logo.png",
                 "menuIcon": true,
                 "name": "logo",
-                "type": "png"
-            },
-            {
-                "file": "images/day_1.png",
-                "name": "DAY_1",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/day_7.png",
                 "name": "DAY_7",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/day_6.png",
                 "name": "DAY_6",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/day_5.png",
                 "name": "DAY_5",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/day_4.png",
                 "name": "DAY_4",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/day_3.png",
                 "name": "DAY_3",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/day_2.png",
                 "name": "DAY_2",
-                "type": "png"
+                "type": "bitmap"
             },
             {
-                "file": "images/date_9.png",
-                "name": "DATE_9",
-                "type": "png"
-            },
-            {
-                "file": "images/date_8.png",
-                "name": "DATE_8",
-                "type": "png"
-            },
-            {
-                "file": "images/date_7.png",
-                "name": "DATE_7",
-                "type": "png"
-            },
-            {
-                "file": "images/date_6.png",
-                "name": "DATE_6",
-                "type": "png"
-            },
-            {
-                "file": "images/date_5.png",
-                "name": "DATE_5",
-                "type": "png"
-            },
-            {
-                "file": "images/date_4.png",
-                "name": "DATE_4",
-                "type": "png"
-            },
-            {
-                "file": "images/date_3.png",
-                "name": "DATE_3",
-                "type": "png"
-            },
-            {
-                "file": "images/date_2.png",
-                "name": "DATE_2",
-                "type": "png"
-            },
-            {
-                "file": "images/date_1.png",
-                "name": "DATE_1",
-                "type": "png"
-            },
-            {
-                "file": "images/date_0.png",
-                "name": "DATE_0",
-                "type": "png"
+                "file": "images/day_1.png",
+                "name": "DAY_1",
+                "type": "bitmap"
             },
             {
                 "file": "images/num_9.png",
                 "name": "NUM_9",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_8.png",
                 "name": "NUM_8",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_7.png",
                 "name": "NUM_7",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_6.png",
                 "name": "NUM_6",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_5.png",
                 "name": "NUM_5",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_4.png",
                 "name": "NUM_4",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_3.png",
                 "name": "NUM_3",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_2.png",
                 "name": "NUM_2",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_1.png",
                 "name": "NUM_1",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/num_0.png",
                 "name": "NUM_0",
-                "type": "png"
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_9.png",
+                "name": "DATE_9",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_8.png",
+                "name": "DATE_8",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_7.png",
+                "name": "DATE_7",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_6.png",
+                "name": "DATE_6",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_5.png",
+                "name": "DATE_5",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_4.png",
+                "name": "DATE_4",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_3.png",
+                "name": "DATE_3",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_2.png",
+                "name": "DATE_2",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_1.png",
+                "name": "DATE_1",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/date_0.png",
+                "name": "DATE_0",
+                "type": "bitmap"
             }
         ]
     },
-    "sdkVersion": "2",
+    "sdkVersion": "3",
     "shortName": "Square Time",
-    "uuid": "76719f97-45cb-4263-88ad-b373ef2a3a42",
-    "versionCode": 1,
-    "versionLabel": "1.45",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "36d6bb25-e429-4455-8bfb-a6f1eb9df80a",
+    "versionLabel": "1.5",
     "watchapp": {
         "watchface": true
     }
