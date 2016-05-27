@@ -62,6 +62,8 @@ static InverterLayer *s1_bar, *s2_bar, *s3_bar, *s4_bar, *s5_bar;
 static InverterLayerCompat *s1_bar, *s2_bar, *s3_bar, *s4_bar, *s5_bar;
 #endif
 
+static GColor fg_color, bg_color;
+
 // Used to stop multiple animations at once
 bool change_state = false;
 
@@ -272,13 +274,13 @@ static void handle_tick(struct tm *t, TimeUnits units_changed)
         util_animate_layer(inverter_layer_compat_func_get(s1_bar), GRect(0, MARGIN + 0*BARLENGTH + 0*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 0*BARLENGTH + 0*BARMARGIN, BARWIDTH, BARLENGTH), 500, 0);
         break;
         case 20:
-        util_animate_layer(inverter_layer_compat_func_get(s2_bar), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN + 1, BARWIDTH, BARLENGTH),  500, 0);
+        util_animate_layer(inverter_layer_compat_func_get(s2_bar), GRect(0, MARGIN + 1*BARLENGTH + 1*1, 0, BARLENGTH), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, BARWIDTH, BARLENGTH),  500, 0);
         break;
         case 30:
-        util_animate_layer(inverter_layer_compat_func_get(s3_bar),  GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN + 1, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, 0, BARLENGTH), 500, 0);
+        util_animate_layer(inverter_layer_compat_func_get(s3_bar), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, BARWIDTH, BARLENGTH), 500, 0);
         break;
         case 40:
-        util_animate_layer(inverter_layer_compat_func_get(s4_bar),  GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN + 1, BARWIDTH, BARLENGTH),  500, 0);
+        util_animate_layer(inverter_layer_compat_func_get(s4_bar),  GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, BARWIDTH, BARLENGTH),  500, 0);
         break;
         case 50:
         util_animate_layer(inverter_layer_compat_func_get(s5_bar),  GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, BARWIDTH, BARLENGTH), 500, 0);
@@ -288,9 +290,9 @@ static void handle_tick(struct tm *t, TimeUnits units_changed)
          int timeleft = (60 - seconds)*150;
          change_state = true;
        util_animate_layer(inverter_layer_compat_func_get(s1_bar), GRect(0, MARGIN + 0*BARLENGTH + 0*BARMARGIN, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 0*BARLENGTH + 0*BARMARGIN, 0, BARLENGTH), 500, 5*timeleft);
-       util_animate_layer(inverter_layer_compat_func_get(s2_bar),  GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN + 1, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, 0, BARLENGTH), 500, 4*timeleft);
-       util_animate_layer(inverter_layer_compat_func_get(s3_bar),  GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN + 1, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, 0, BARLENGTH), 500, 3*timeleft);
-       util_animate_layer(inverter_layer_compat_func_get(s4_bar),  GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN + 1, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, 0, BARLENGTH), 500, 2*timeleft);
+       util_animate_layer(inverter_layer_compat_func_get(s2_bar),  GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, 0, BARLENGTH), 500, 4*timeleft);
+       util_animate_layer(inverter_layer_compat_func_get(s3_bar),  GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, 0, BARLENGTH), 500, 3*timeleft);
+       util_animate_layer(inverter_layer_compat_func_get(s4_bar),  GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, 0, BARLENGTH), 500, 2*timeleft);
        util_animate_layer(inverter_layer_compat_func_get(s5_bar),  GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, BARWIDTH, BARLENGTH), GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, 0, BARLENGTH), 500, timeleft);
     }
     if ((units_changed & DAY_UNIT) == DAY_UNIT) {
@@ -330,17 +332,17 @@ static void main_window_load(Window *window) {
         util_animate_layer(inverter_layer_compat_func_get(s1_bar), GRect(0, MARGIN + 0*BARLENGTH + 0*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 0*BARLENGTH + 0*BARMARGIN, BARWIDTH, BARLENGTH), 500, 0); 
         }
         if (seconds > 20){
-        util_animate_layer(inverter_layer_compat_func_get(s2_bar),  GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN + 1, 0, BARLENGTH), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, BARWIDTH, BARLENGTH), 500, 100); 
+        util_animate_layer(inverter_layer_compat_func_get(s2_bar), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 1*BARLENGTH + 1*BARMARGIN, BARWIDTH, BARLENGTH),  500, 100); 
         }  
         if (seconds > 30){
-        util_animate_layer(inverter_layer_compat_func_get(s3_bar),  GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN + 1, 0, BARLENGTH), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, BARWIDTH, BARLENGTH), 500, 200); 
+        util_animate_layer(inverter_layer_compat_func_get(s3_bar), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 2*BARLENGTH + 2*BARMARGIN, BARWIDTH, BARLENGTH), 500, 200); 
         }        
 
         if (seconds > 40){
-        util_animate_layer(inverter_layer_compat_func_get(s4_bar),  GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN + 1, 0, BARLENGTH), GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, BARWIDTH, BARLENGTH), 500, 300); 
+        util_animate_layer(inverter_layer_compat_func_get(s4_bar),  GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 3*BARLENGTH + 3*BARMARGIN, BARWIDTH, BARLENGTH), 500, 300); 
         }        
         if (seconds > 50){
-         util_animate_layer(inverter_layer_compat_func_get(s5_bar),  GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, BARWIDTH, BARLENGTH), 500, 400); 
+        util_animate_layer(inverter_layer_compat_func_get(s5_bar),  GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, 0, BARLENGTH), GRect(0, MARGIN + 4*BARLENGTH + 4*BARMARGIN, BARWIDTH, BARLENGTH), 500, 400);
         }
 
 
@@ -365,6 +367,12 @@ static void init() {
         .load = main_window_load,
         .unload = main_window_unload,
     });
+    
+      fg_color = GColorBlack;
+      bg_color = GColorWhite;
+      #ifdef PBL_SDK_3
+      inverter_layer_compat_set_colors(bg_color, fg_color);
+    #endif
     window_stack_push(s_main_window, true);
 }
 static void deinit() {
